@@ -1,0 +1,3 @@
+isto e um teste da funcao readln
+teste2
+teste3
