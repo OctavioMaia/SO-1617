@@ -2,6 +2,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 void mycat(){
 	char input;
@@ -38,28 +39,41 @@ void mycat_n(int N){
 }
 
 ssize_t readln(int fildes, char *buf, size_t nbyte){
-	int i=0;
+	int i=0, nl=0;
 	char input;
 
-	while((input=read(fildes,buf,1)==1) && &buf[i]!='\0'){
+	while(read(fildes,&input,1) && input!='\0'){
 		buf[i]=input;
 		i++;
 	}
-	printf("%d\n",i);
 }
 
 void n1(char *file){
-	int linha=0;
-	int fd;
-	char buf[1024];
+	int linha=0,i,j=0;
+	int fd = open(file,O_RDONLY);
+	char buf[1024],input;
 
-	if(file){
-		printf("file: %s\n",file);
-		fd = open(file,O_RDONLY);
+	if(fd!=-1){
 		readln(fd,buf,1);
+		printf("linha %d: ",++linha);
+		for(i=0;buf[i]!='\0';i++){
+			if(buf[i]=='\n'){
+				linha++;
+				printf("\nlinha %d: ",linha);
+			}
+			else
+				printf("%c",buf[i]);
+		}
+		printf("\n");
 	}else{
-		printf("not file\n");
-		mycat();
+		printf("no file\n");
+		while(read(0,&input, 1)){
+			if(input=='\n'){
+				printf(" -> linha %d\n",++linha);
+			}else{
+				printf("%c",input);
+			}
+		}
 	}
 }
 
@@ -73,7 +87,7 @@ int main(int argc, char* argv[]) {
 	int fp = open("teste.txt",O_RDONLY);
 	readln(fp,buf,1024);
 	*/
-
+	
 	n1(argv[1]);
 
 	return 0;
