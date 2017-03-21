@@ -1,0 +1,41 @@
+awk '{print $1}' arq-son.old.txt
+imprime 1º elemento 
+
+awk '{print $NF}' arq-son.old.txt
+imprime ultimo elemento
+
+awk '{print $NF-1}' arq-son.old.txt
+imprime penultimo elem
+
+awk 'END {print NR}' arq-son.old.txt
+imprime nº linhas
+
+awk -F:: '{print $1}' arq-son.old.txt
+imprime o 1º elemento, usando como FS (field separator) ::
+
+awk -F:: '$1=="Madeira" {print}' arq-son.old.txt
+imprime os elementos cujo primeiro elemento começa por Madeira
+
+awk -F:: '{print NF}' arq-son.old.txt
+imprime numero elementos de uma dada linha, usando como FS ::
+
+awk -F:: '{print NF}' arq-son.old.txt |sort | uniq -c
+igual ao de cima, mas faz sort e retira os repetidos	
+
+awk 'NF==7 {print}' arq-son.old.txt > arq.txt
+copia as linhas com 7 elementos para outro ficheiro
+
+awk -F:: '{a[$1]++} END {for(i in a) print i, a[i]}' arq-son.limpo.txt
+pega no primeiro elemento, mete num array e incrementa o contador desse elemento qd ele ocorre. depois imprime
+
+awk -F:: '$1=="Madeira" {print $(NF-2)}' arq-son.limpo.txt
+imprime antepenultime elemento do filtro $1==madeira
+
+awk -F:: '$1=="Madeira" {print $(NF)}' arq-son.limpo.txt | awk -F: ' {s+=$1*60+$2} END {print s}'
+vai buscar a duracao das musicas na madeira, que estao no ultimo campo (NF). isto da a duracao em minutos e segundos, tipo 2:30. depois invocamos o awk de novo para calcular em segundos
+
+awk -F:: '/flauta/ {print}' arq-son.limpo.txt 
+imprime qd aparece flauta
+
+awk -F:: '$4!~/flauta/ {print}' arq-son.limpo.txt 
+imprime qd o 4º elemento nao é igual a flauta
